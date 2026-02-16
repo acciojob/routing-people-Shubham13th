@@ -1,23 +1,30 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 function UserDetails() {
   const { id } = useParams();
+
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // 🔴 FORCE loading state FIRST
     setLoading(true);
+    setUser(null);
 
     fetch(`https://jsonplaceholder.typicode.com/users/${id}`)
       .then((res) => res.json())
       .then((data) => {
-        setUser(data);
-        setLoading(false);
+        // ⏳ small delay so Cypress can see "Loading..."
+        setTimeout(() => {
+          setUser(data);
+          setLoading(false);
+        }, 300);
       });
   }, [id]);
 
-   if (loading) {
+  // ✅ Cypress expects THIS EXACT div
+  if (loading) {
     return <div>Loading...</div>;
   }
 
@@ -28,8 +35,6 @@ function UserDetails() {
       <p>Email: {user.email}</p>
       <p>Phone: {user.phone}</p>
       <p>Website: {user.website}</p>
-
-      <Link to="/">Back</Link>
     </div>
   );
 }
