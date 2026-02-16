@@ -18,7 +18,7 @@ function UserDetails() {
   }, [id]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <p>Loading...</p>;
   }
 
   return (
